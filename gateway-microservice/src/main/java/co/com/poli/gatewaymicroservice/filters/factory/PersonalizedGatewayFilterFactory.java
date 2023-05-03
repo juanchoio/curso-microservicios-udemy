@@ -3,7 +3,6 @@ package co.com.poli.gatewaymicroservice.filters.factory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
-import org.springframework.cloud.gateway.filter.OrderedGatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
@@ -25,7 +24,7 @@ public class PersonalizedGatewayFilterFactory extends AbstractGatewayFilterFacto
     @Override
     public GatewayFilter apply(Configuration config) {
 
-        return new OrderedGatewayFilter((exchange, chain) -> {
+        return (exchange, chain) -> {
             //pre
             logger.info("Ejecutando pre gateway filter factory: " + config.mensaje);
 
@@ -36,7 +35,7 @@ public class PersonalizedGatewayFilterFactory extends AbstractGatewayFilterFacto
                 });
                 logger.info("Ejecutando post gateway filter factory: " +config.mensaje);
             }));
-        }, 2);
+        };
     }
 
     @Override

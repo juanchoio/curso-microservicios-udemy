@@ -7,10 +7,7 @@ import co.com.poli.item.services.ItemService;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,7 +20,11 @@ public class ItemController {
     private ItemService itemService;
 
     @GetMapping
-    public List<Item> findAll(){
+    public List<Item> findAll(
+            @RequestParam(name = "nombre") String nombre,
+            @RequestHeader(name = "token-request") String token) {
+        System.out.println("RequestParam: {nombre} " + nombre);
+        System.out.println("RequestHeader: {token-request} " + token);
         return itemService.findAll();
     }
 
