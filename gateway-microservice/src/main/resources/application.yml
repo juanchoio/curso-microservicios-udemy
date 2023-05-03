@@ -1,0 +1,22 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: product-microservice
+          uri: lb://product-microservice
+          predicates:
+            - Path=/api/product-microservice/**
+          filters:
+            - StripPrefix=2
+            - PersonalizedCookie=Hola mi mensaje personalizado, usuario, juanchoio
+#            - name: Personalized
+#              args:
+#                mensaje: Hola mi mensaje personalizado
+#                cookieName: usuario
+#                cookieValor: juanchoio
+        - id: item-microservice
+          uri: lb://item-microservice
+          predicates:
+            - Path=/api/item-microservice/**
+          filters:
+            - StripPrefix=2
