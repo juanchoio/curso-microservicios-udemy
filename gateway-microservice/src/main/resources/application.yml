@@ -6,6 +6,11 @@ spring:
           uri: lb://product-microservice
           predicates:
             - Path=/api/product-microservice/**
+#            - Header= token, \d+
+#            - Header= Content-Type, application/json
+#            - Method= GET, POST #PUT, DELETE
+#            - Query= color
+#            - Cookie= color, azul
           filters:
             - StripPrefix=2
             - PersonalizedCookie=Hola mi mensaje personalizado, usuario, juanchoio

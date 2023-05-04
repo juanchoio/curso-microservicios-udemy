@@ -8,6 +8,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @RestController
@@ -32,7 +33,9 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public Product findById(@PathVariable Long id){
+    public Product findById(@PathVariable Long id) throws InterruptedException {
+        if(id.equals(10L)) throw new IllegalStateException("Producto no encontrado");
+        if(id.equals(7L)) TimeUnit.SECONDS.sleep(5L);
         Product product = productService.findById(id);
         product.setPort(Integer.parseInt(environment.getProperty("local.server.port")));
 /*        boolean ok = false;
