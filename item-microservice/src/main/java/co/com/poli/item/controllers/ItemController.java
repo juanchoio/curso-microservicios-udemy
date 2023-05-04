@@ -5,6 +5,8 @@ import co.com.poli.item.models.Product;
 import co.com.poli.item.services.ItemService;
 
 //import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/items")
@@ -47,6 +50,20 @@ public class ItemController {
                 );
     }
 
+    //usando anotaciones solo se aplica la configuracion via archivo de config
+    @CircuitBreaker(name = "item", fallbackMethod = "metodoAlternativo")
+    @GetMapping("/annotation/{id}/quantity/{quantity}")
+    public Item findById2(@PathVariable Long id, @PathVariable Integer quantity) {
+        return itemService.findById(id, quantity);
+    }
+
+    @CircuitBreaker(name = "item", fallbackMethod = "metodoAlternativo2")
+    @TimeLimiter(name = "item", fallbackMethod = "metodoAlternativo2")
+    @GetMapping("/annotation2/{id}/quantity/{quantity}")
+    public CompletableFuture<Item> findById3(@PathVariable Long id, @PathVariable Integer quantity) {
+        return CompletableFuture.supplyAsync(() -> itemService.findById(id, quantity)) ;
+    }
+
     public Item metodoAlternativo(Long id, Integer quantity,Throwable e){
         logger.error(e.getMessage());
         Item item = new Item();
@@ -57,5 +74,17 @@ public class ItemController {
         product.setPrice(500.00);
         item.setProduct(product);
         return item;
+    }
+
+    public CompletableFuture<Item> metodoAlternativo2(Long id, Integer quantity,Throwable e){
+        logger.error(e.getMessage());
+        Item item = new Item();
+        Product product = new Product();
+        item.setQuantity(quantity);
+        product.setId(id);
+        product.setName("Camara Sony");
+        product.setPrice(500.00);
+        item.setProduct(product);
+        return CompletableFuture.supplyAsync(() -> item);
     }
 }
