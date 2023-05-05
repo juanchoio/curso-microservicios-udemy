@@ -1,0 +1,11 @@
+
+spring:
+  application:
+    name: configuration-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: file:///C:/Users/choio/Desktop/config
+server:
+  port: 8888
