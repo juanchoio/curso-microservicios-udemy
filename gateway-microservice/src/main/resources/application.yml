@@ -1,3 +1,23 @@
+resilience4j:
+  circuitbreaker:
+    configs:
+      defaultConfig:
+        sliding-window-size: 6
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 20s
+        permitted-number-of-calls-in-half-open-state: 4
+        slow-call-rate-threshold: 50
+        slow-call-duration-threshold: 2s
+    instances:
+      products:
+        base-config: defaultConfig
+  timelimiter:
+    configs:
+      defaultConfig:
+        timeout-duration: 2s
+    instances:
+      products:
+        base-config: defaultConfig
 spring:
   cloud:
     gateway:
@@ -12,6 +32,11 @@ spring:
 #            - Query= color
 #            - Cookie= color, azul
           filters:
+            - name: CircuitBreaker
+              args:
+                name: products
+                statusCodes: 500
+                fallbackUri: forward:/api/item-microservice/items/annotation2/9/quantity/5
             - StripPrefix=2
             - PersonalizedCookie=Hola mi mensaje personalizado, usuario, juanchoio
 #            - name: Personalized

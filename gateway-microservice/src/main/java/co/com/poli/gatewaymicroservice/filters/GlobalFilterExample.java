@@ -44,6 +44,6 @@ public class GlobalFilterExample implements GlobalFilter, Ordered {
     //da una precedencia en el orden de ejecucion de los filtros
     @Override
     public int getOrder() {
-        return 1;
+        return 10;
     }
 }

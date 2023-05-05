@@ -27,7 +27,7 @@ public class ItemController {
     private CircuitBreakerFactory cbFactory;
 
     @Autowired
-    @Qualifier(value = "item-service-feign-client")
+    @Qualifier(value = "item-service-rest-template")
     private ItemService itemService;
 
     @GetMapping
@@ -82,7 +82,7 @@ public class ItemController {
         Product product = new Product();
         item.setQuantity(quantity);
         product.setId(id);
-        product.setName("Camara Sony");
+        product.setName("Camara Kodak");
         product.setPrice(500.00);
         item.setProduct(product);
         return CompletableFuture.supplyAsync(() -> item);
