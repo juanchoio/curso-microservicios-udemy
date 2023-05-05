@@ -6,6 +6,8 @@ spring:
     config:
       server:
         git:
-          uri: file:///C:/Users/choio/Desktop/config
+#          uri: file:///C:/Users/choio/Desktop/config
+          uri: https://github.com/juanchoio/curso-microservicios-udemy-config-server.git
+          default-label: main
 server:
   port: 8888

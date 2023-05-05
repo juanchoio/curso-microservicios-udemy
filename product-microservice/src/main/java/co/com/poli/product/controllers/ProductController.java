@@ -5,6 +5,7 @@ import co.com.poli.product.models.services.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -50,9 +51,29 @@ public class ProductController {
         return productService.findById(id);
     }
 
+
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Product save(@RequestBody Product product){
         return productService.save(product);
+    }
+
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Product update(
+            @PathVariable("id") Long id,
+            @RequestBody Product product) {
+        Product productToUpdate = productService.findById(id);
+        productToUpdate.setName(product.getName());
+        productToUpdate.setPrice(product.getPrice());
+        return productService.save(productToUpdate);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        productService.deleteById(id);
     }
 
 
